@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="fa" dir="rtl" data-theme="dark" data-lang="fa">
 <head>
 <meta charset="UTF-8">
@@ -1287,6 +1287,302 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
       renderFilms('categoryGrid', films);
     } else {
       const filtered = films.filter(f => f.genres.en.includes(genre));
+      renderFilms('categoryGrid',         <span class="accent en-only">🔥 Trending Now</span>
+      </h2>
+    </div>
+    <div class="films-grid" id="trendingGrid"></div>
+  </div>
+</section>
+
+<section id="top-rated">
+  <div class="container">
+    <div class="section-head">
+      <h2>
+        <span class="accent fa-only">⭐ برترین‌ها</span>
+        <span class="accent en-only">⭐ Top Rated</span>
+      </h2>
+    </div>
+    <div class="films-grid" id="topRatedGrid"></div>
+  </div>
+</section>
+
+<section id="categories">
+  <div class="container">
+    <div class="section-head">
+      <h2>
+        <span class="accent fa-only">🎭 دسته‌بندی</span>
+        <span class="accent en-only">🎭 Categories</span>
+      </h2>
+    </div>
+    <div class="category-tabs">
+      <button class="cat-btn active" data-genre="all">
+        <span class="fa-only">همه</span>
+        <span class="en-only">All</span>
+      </button>
+      <button class="cat-btn" data-genre="Drama">درام</button>
+      <button class="cat-btn" data-genre="Crime">جنایی</button>
+      <button class="cat-btn" data-genre="Sci-Fi">علمی‌تخیلی</button>
+      <button class="cat-btn" data-genre="Action">اکشن</button>
+      <button class="cat-btn" data-genre="Thriller">دلهره‌آور</button>
+      <button class="cat-btn" data-genre="Animation">انیمیشن</button>
+      <button class="cat-btn" data-genre="Romance">عاشقانه</button>
+      <button class="cat-btn" data-genre="Horror">ترسناک</button>
+      <button class="cat-btn" data-genre="Comedy">کمدی</button>
+      <button class="cat-btn" data-genre="Adventure">ماجراجویی</button>
+      <button class="cat-btn" data-genre="Fantasy">فانتزی</button>
+    </div>
+    <div class="films-grid" id="categoryGrid"></div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="filmModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeFilm()">✕</button>
+    <div class="modal-hero" id="modalHero"></div>
+    <div class="modal-body">
+      <h2 id="modalTitle"></h2>
+      <div class="modal-subtitle" id="modalSubtitle"></div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-rating">
+        <div class="big-rating" id="modalRating"></div>
+        <div>
+          <div class="rating-stars">★★★★★</div>
+          <div class="rating-count" id="modalRatingCount"></div>
+        </div>
+      </div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-cast">
+        <h3 class="fa-only">بازیگران</h3>
+        <h3 class="en-only">Cast</h3>
+        <div class="cast-list" id="modalCast"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box">
+    <input type="text" class="search-input" id="searchInput" placeholder="جستجو در فیلم‌ها...">
+    <button class="search-close" onclick="closeSearch()">✕</button>
+  </div>
+  <div class="search-results">
+    <div class="films-grid" id="searchResults"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">
+    <div class="logo-icon">CE</div>
+    <span class="fa-only">سینما احسان</span>
+    <span class="en-only">Cinema Ehsan</span>
+  </div>
+  <div class="footer-links">
+    <a href="#trending" class="fa-only">پرطرفدار</a>
+    <a href="#trending" class="en-only">Trending</a>
+    <a href="#top-rated" class="fa-only">برترین‌ها</a>
+    <a href="#top-rated" class="en-only">Top Rated</a>
+    <a href="#categories" class="fa-only">دسته‌بندی</a>
+    <a href="#categories" class="en-only">Categories</a>
+  </div>
+  <div class="footer-copy">
+    <span class="fa-only">© ۱۴۰۵ سینما احسان | تمام حقوق محفوظ است</span>
+    <span class="en-only">© 2026 Cinema Ehsan | All Rights Reserved</span>
+  </div>
+</footer>
+
+<div class="scroll-top" id="scrollTop">↑</div>
+
+<script src="films.js"></script>
+<script src="films-2.js"></script>
+<script src="films-3.js"></script>
+<script>
+const films = [...films1, ...films2, ...films3];
+let currentLang = localStorage.getItem('cinema-lang') || 'fa';
+document.documentElement.setAttribute('data-lang', currentLang);
+
+function renderFilms(gridId, filmList) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  if (filmList.length === 0) {
+    grid.innerHTML = '<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 40px;">نتیجه‌ای پیدا نشد</p>';
+    return;
+  }
+  grid.innerHTML = filmList.map((film) => `
+    <div class="film-card" onclick="openFilm(${films.indexOf(film)})">
+      <div class="film-poster" style="background: ${film.posterGradient};">
+        <div class="film-rating">★ ${film.rating}</div>
+        <div class="film-year-badge">${film.year}</div>
+        ${film.isCartoon && film.icon ? `<div class="poster-icon">${film.icon}</div>` : ''}
+        <div class="poster-title">${film.posterTitle}</div>
+        <div class="poster-subtitle">${film.posterSubtitle}</div>
+      </div>
+      <div class="film-info">
+        <h3>${film.title[currentLang]}</h3>
+        <div class="type">${film.genres[currentLang].join(' · ')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function initFilms() {
+  const sortedByRating = [...films].sort((a, b) => b.rating - a.rating);
+  renderFilms('trendingGrid', films.slice(0, 20));
+  renderFilms('topRatedGrid', sortedByRating.slice(0, 20));
+  renderFilms('categoryGrid', films);
+  renderFilms('searchResults', []);
+}
+
+function openFilm(idx) {
+  const film = films[idx];
+  document.getElementById('modalHero').style.background = film.posterGradient;
+  document.getElementById('modalHero').innerHTML = `
+    ${film.isCartoon && film.icon ? `<div class="poster-icon" style="font-size: 80px;">${film.icon}</div>` : ''}
+    <div class="poster-title">${film.posterTitle}</div>
+    <div class="poster-subtitle">${film.posterSubtitle}</div>
+  `;
+  document.getElementById('modalTitle').textContent = film.title[currentLang];
+  document.getElementById('modalSubtitle').textContent = `${film.year} · ${film.director}`;
+  document.getElementById('modalRating').textContent = film.rating;
+  document.getElementById('modalRatingCount').textContent = `${film.ratingCount} ratings`;
+  document.getElementById('modalDesc').textContent = film.desc[currentLang];
+  document.getElementById('modalMeta').innerHTML = `
+    <div class="item"><span class="label">${currentLang === 'fa' ? 'سال' : 'Year'}</span><span class="value">${film.year}</span></div>
+    <div class="item"><span class="label">${currentLang === 'fa' ? 'مدت' : 'Duration'}</span><span class="value">${film.duration} min</span></div>
+    <div class="item"><span class="label">${currentLang === 'fa' ? 'کارگردان' : 'Director'}</span><span class="value">${film.director}</span></div>
+    <div class="item"><span class="label">${currentLang === 'fa' ? 'ژانر' : 'Genre'}</span><span class="value">${film.genres[currentLang].join('، ')}</span></div>
+  `;
+  document.getElementById('modalCast').innerHTML = film.cast.map(c => `<span class="cast-chip">${c}</span>`).join('');
+  document.getElementById('filmModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFilm() {
+  document.getElementById('filmModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('filmModal').addEventListener('click', (e) => {
+  if (e.target.id === 'filmModal') closeFilm();
+});
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loadingScreen').classList.add('hide');
+  }, 1500);
+});
+
+const cursor = document.getElementById('cursor');
+const cursorFollower = document.getElementById('cursorFollower');
+document.addEventListener('mousemove', (e) => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    cursorFollower.style.left = e.clientX + 'px';
+    cursorFollower.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a, button, .film-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'scale(2.5)';
+    cursorFollower.style.width = '64px';
+    cursorFollower.style.height = '64px';
+    cursorFollower.style.opacity = '0.7';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'scale(1)';
+    cursorFollower.style.width = '36px';
+    cursorFollower.style.height = '36px';
+    cursorFollower.style.opacity = '0.4';
+  });
+});
+
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+const savedTheme = localStorage.getItem('cinema-theme') || 'dark';
+html.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+themeToggle.addEventListener('click', () => {
+  const c = html.getAttribute('data-theme');
+  const n = c === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', n);
+  localStorage.setItem('cinema-theme', n);
+  themeToggle.textContent = n === 'dark' ? '☀️' : '🌙';
+});
+
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'fa' ? 'en' : 'fa';
+  document.documentElement.setAttribute('data-lang', currentLang);
+  localStorage.setItem('cinema-lang', currentLang);
+  initFilms();
+});
+
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  const d = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = ((s / d) * 100) + '%';
+  document.getElementById('scrollTop').classList.toggle('visible', s > 500);
+});
+
+document.getElementById('scrollTop').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+const header = document.getElementById('header');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  if (s > 100) {
+    header.classList.toggle('hidden', s > lastScroll);
+  } else {
+    header.classList.remove('hidden');
+  }
+  lastScroll = s;
+});
+
+document.getElementById('searchToggle').addEventListener('click', () => {
+  document.getElementById('searchOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('searchInput').focus(), 100);
+});
+
+function closeSearch() {
+  document.getElementById('searchOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  document.getElementById('searchInput').value = '';
+  renderFilms('searchResults', []);
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase().trim();
+  if (!query) {
+    renderFilms('searchResults', []);
+    return;
+  }
+  const results = films.filter(f =>
+    f.title.fa.toLowerCase().includes(query) ||
+    f.title.en.toLowerCase().includes(query) ||
+    f.director.toLowerCase().includes(query)
+  );
+  renderFilms('searchResults', results);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeFilm();
+    closeSearch();
+  }
+});
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const genre = btn.dataset.genre;
+    if (genre === 'all') {
+      renderFilms('categoryGrid', films);
+    } else {
+      const filtered = films.filter(f => f.genres.en.includes(genre));
       renderFilms('categoryGrid', filtered);
     }
   });
@@ -1296,4 +1592,5 @@ initFilms();
 </script>
 
 </body>
-</html>       
+</html>
+                  
