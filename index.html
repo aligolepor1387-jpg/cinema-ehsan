@@ -462,6 +462,19 @@ footer { background: var(--bg-secondary); border-top: 1px solid var(--border); p
 
 <div class="scroll-top" id="scrollTop">↑</div>
 
+<!-- ===== کد مخفی کردن لودر (مستقل و اول از همه) ===== -->
+<script>
+  setTimeout(function() {
+    var loader = document.getElementById('loadingScreen');
+    if (loader) {
+      loader.classList.add('hide');
+      setTimeout(function() {
+        loader.style.display = 'none';
+      }, 700);
+    }
+  }, 2000);
+</script>
+
 <script src="films.js"></script>
 <script src="films-2.js"></script>
 <script src="films-3.js"></script>
@@ -535,18 +548,6 @@ function closeFilm() {
 document.getElementById('filmModal').addEventListener('click', (e) => {
   if (e.target.id === 'filmModal') closeFilm();
 });
-
-/* ====== بستن صفحه لودینگ بعد از ۲ ثانیه ====== */
-setTimeout(() => {
-  const loader = document.getElementById('loadingScreen');
-  if (loader) loader.classList.add('hide');
-}, 2000);
-
-/* ====== حذف کامل لودر از صفحه بعد از انیمیشن محو شدن ====== */
-setTimeout(() => {
-  const loader = document.getElementById('loadingScreen');
-  if (loader) loader.style.display = 'none';
-}, 2700);
 
 const cursor = document.getElementById('cursor');
 const cursorFollower = document.getElementById('cursorFollower');
