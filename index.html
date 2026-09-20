@@ -23,7 +23,6 @@
   --accent-dark: #0066b1;
   --accent-light: #7cc0ff;
   --bmw-blue: #0066b1;
-  --bmw-light: #4da6ff;
   --bmw-silver: #c0c0c0;
   --gold: #ffd700;
   --glow: rgba(77, 166, 255, 0.3);
@@ -59,8 +58,6 @@ body {
 [data-lang="fa"] body { direction: rtl; }
 [data-lang="en"] body { direction: ltr; }
 a, button, select, input { cursor: none; }
-
-/* HIDE/SHOW LANG */
 [data-lang="fa"] .en-only { display: none !important; }
 [data-lang="en"] .fa-only { display: none !important; }
 
@@ -244,8 +241,6 @@ nav a:hover::after { width: 100%; }
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
   opacity: 0.4;
   filter: blur(2px);
   z-index: -1;
@@ -369,7 +364,6 @@ nav a:hover::after { width: 100%; }
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-3px);
 }
-
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -402,12 +396,9 @@ section { position: relative; z-index: 1; padding: 80px 40px; }
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: gap 0.3s;
+  transition: all 0.3s;
 }
-.section-head .view-all:hover { gap: 12px; }
+.section-head .view-all:hover { transform: translateX(-5px); }
 
 /* FILM GRID */
 .films-grid {
@@ -780,7 +771,6 @@ footer {
   transform: translateY(-3px);
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
   header { padding: 14px 20px; }
   nav { display: none; }
@@ -889,10 +879,6 @@ footer {
         <span class="accent fa-only">🔥 پرطرفدار</span>
         <span class="accent en-only">🔥 Trending Now</span>
       </h2>
-      <a href="#" class="view-all">
-        <span class="fa-only">مشاهده همه ←</span>
-        <span class="en-only">View All →</span>
-      </a>
     </div>
     <div class="films-grid" id="trendingGrid"></div>
   </div>
@@ -905,10 +891,6 @@ footer {
         <span class="accent fa-only">⭐ برترین‌ها</span>
         <span class="accent en-only">⭐ Top Rated</span>
       </h2>
-      <a href="#" class="view-all">
-        <span class="fa-only">مشاهده همه ←</span>
-        <span class="en-only">View All →</span>
-      </a>
     </div>
     <div class="films-grid" id="topRatedGrid"></div>
   </div>
@@ -932,6 +914,8 @@ footer {
       <button class="cat-btn" data-genre="Sci-Fi">علمی‌تخیلی</button>
       <button class="cat-btn" data-genre="Action">اکشن</button>
       <button class="cat-btn" data-genre="Thriller">دلهره‌آور</button>
+      <button class="cat-btn" data-genre="Animation">انیمیشن</button>
+      <button class="cat-btn" data-genre="Romance">عاشقانه</button>
     </div>
     <div class="films-grid" id="categoryGrid"></div>
   </div>
@@ -994,179 +978,19 @@ footer {
 
 <div class="scroll-top" id="scrollTop">↑</div>
 
+<script src="films.js"></script>
 <script>
-// ===== FILMS DATA =====
-const films = [
-  {
-    title: { fa: "رستگاری در شاوشنک", en: "The Shawshank Redemption" },
-    year: 1994,
-    rating: 9.3,
-    ratingCount: "2.8M",
-    genres: { fa: ["درام", "جنایی"], en: ["Drama", "Crime"] },
-    duration: 142,
-    director: "Frank Darabont",
-    cast: ["Tim Robbins", "Morgan Freeman", "Bob Gunton"],
-    icon: "🔓",
-    poster: "linear-gradient(135deg, #1e3a8a, #0a1929)",
-    desc: {
-      fa: "اندی دوفرین، بانکداری که به جرم قتل همسرش به زندان شاوشنک فرستاده می‌شه، در طول ۲۰ سال با امید و دوستی با رد، زندگی‌اش رو تغییر می‌ده و به آزادی می‌رسه.",
-      en: "Andy Dufresne, a banker sentenced to Shawshank prison for a crime he didn't commit, transforms his life through hope and friendship over 20 years."
-    }
-  },
-  {
-    title: { fa: "پدرخوانده", en: "The Godfather" },
-    year: 1972,
-    rating: 9.2,
-    ratingCount: "2M",
-    genres: { fa: ["جنایی", "درام"], en: ["Crime", "Drama"] },
-    duration: 175,
-    director: "Francis Ford Coppola",
-    cast: ["Marlon Brando", "Al Pacino", "James Caan"],
-    icon: "🎩",
-    poster: "linear-gradient(135deg, #7f1d1d, #1a1a1a)",
-    desc: {
-      fa: "داستان خانواده مافیایی کورلیونه و انتقال قدرت از پدر به پسر کوچکش، مایکل، که به یک رئیس مافیا تبدیل می‌شه.",
-      en: "The story of the Corleone mafia family and the transfer of power from father to his youngest son, Michael."
-    }
-  },
-  {
-    title: { fa: "شوالیه تاریکی", en: "The Dark Knight" },
-    year: 2008,
-    rating: 9.0,
-    ratingCount: "2.9M",
-    genres: { fa: ["اکشن", "جنایی"], en: ["Action", "Crime"] },
-    duration: 152,
-    director: "Christopher Nolan",
-    cast: ["Christian Bale", "Heath Ledger", "Aaron Eckhart"],
-    icon: "🦇",
-    poster: "linear-gradient(135deg, #111, #4da6ff)",
-    desc: {
-      fa: "بتمن با جرم‌شناس، جاکر، روبرو می‌شه؛ دیوانه‌ای که می‌خواد گاتهام رو به هرج و مرج بکشه.",
-      en: "Batman faces the Joker, a criminal mastermind who wants to plunge Gotham into chaos."
-    }
-  },
-  {
-    title: { fa: "تلقین", en: "Inception" },
-    year: 2010,
-    rating: 8.8,
-    ratingCount: "2.5M",
-    genres: { fa: ["علمی‌تخیلی", "اکشن"], en: ["Sci-Fi", "Action"] },
-    duration: 148,
-    director: "Christopher Nolan",
-    cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"],
-    icon: "🌀",
-    poster: "linear-gradient(135deg, #1e3a8a, #7c3aed)",
-    desc: {
-      fa: "دام کاب، دزد ماهری که وارد رویاها می‌شه، ماموریت داره یه ایده رو در ذهن وارث یه شرکت بزرگ بکاره.",
-      en: "Dom Cobb, a skilled thief who enters dreams, is tasked with planting an idea in a corporate heir's mind."
-    }
-  },
-  {
-    title: { fa: "میان‌ستاره‌ای", en: "Interstellar" },
-    year: 2014,
-    rating: 8.7,
-    ratingCount: "2M",
-    genres: { fa: ["علمی‌تخیلی", "درام"], en: ["Sci-Fi", "Drama"] },
-    duration: 169,
-    director: "Christopher Nolan",
-    cast: ["Matthew McConaughey", "Anne Hathaway", "Jessica Chastain"],
-    icon: "🌌",
-    poster: "linear-gradient(135deg, #0f172a, #4da6ff)",
-    desc: {
-      fa: "گروهی از فضانوردان برای یافتن خانه جدیدی برای بشریت، از کرم‌چاله‌ای عبور می‌کنن.",
-      en: "A team of astronauts travels through a wormhole to find a new home for humanity."
-    }
-  },
-  {
-    title: { fa: "ماتریکس", en: "The Matrix" },
-    year: 1999,
-    rating: 8.7,
-    ratingCount: "2M",
-    genres: { fa: ["علمی‌تخیلی", "اکشن"], en: ["Sci-Fi", "Action"] },
-    duration: 136,
-    director: "The Wachowskis",
-    cast: ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss"],
-    icon: "💊",
-    poster: "linear-gradient(135deg, #064e3b, #111)",
-    desc: {
-      fa: "نئو، هکری که کشف می‌کنه دنیایی که توش زندگی می‌کنه، یه شبیه‌سازی کامپیوتریه و باید حقیقت رو ببینه.",
-      en: "Neo, a hacker who discovers that his reality is a computer simulation, must face the truth."
-    }
-  },
-  {
-    title: { fa: "پالپ فیکشن", en: "Pulp Fiction" },
-    year: 1994,
-    rating: 8.9,
-    ratingCount: "2.2M",
-    genres: { fa: ["جنایی", "درام"], en: ["Crime", "Drama"] },
-    duration: 154,
-    director: "Quentin Tarantino",
-    cast: ["John Travolta", "Uma Thurman", "Samuel L. Jackson"],
-    icon: "🍔",
-    poster: "linear-gradient(135deg, #7f1d1d, #f59e0b)",
-    desc: {
-      fa: "چند داستان درهم‌تنیده از زندگی گانگسترها، بوکسور و همسر یه رئیس مافیا.",
-      en: "Interconnected stories of gangsters, a boxer, and a mob boss's wife."
-    }
-  },
-  {
-    title: { fa: "فارست گامپ", en: "Forrest Gump" },
-    year: 1994,
-    rating: 8.8,
-    ratingCount: "2.2M",
-    genres: { fa: ["درام", "عاشقانه"], en: ["Drama", "Romance"] },
-    duration: 142,
-    director: "Robert Zemeckis",
-    cast: ["Tom Hanks", "Robin Wright", "Gary Sinise"],
-    icon: "🏃",
-    poster: "linear-gradient(135deg, #1e40af, #f59e0b)",
-    desc: {
-      fa: "داستان زندگی فارست گامپ، مردی ساده‌دل که به طور تصادفی در رویدادهای تاریخی مهمی حاضر می‌شه.",
-      en: "The life story of Forrest Gump, a simple man who accidentally becomes part of major historical events."
-    }
-  },
-  {
-    title: { fa: "انگل", en: "Parasite" },
-    year: 2019,
-    rating: 8.5,
-    ratingCount: "900K",
-    genres: { fa: ["درام", "دلهره‌آور"], en: ["Drama", "Thriller"] },
-    duration: 132,
-    director: "Bong Joon-ho",
-    cast: ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong"],
-    icon: "🏠",
-    poster: "linear-gradient(135deg, #064e3b, #1a1a1a)",
-    desc: {
-      fa: "خانواده فقیر کیم با نفوذ در خانه خانواده ثروتمند پارک، داستان طبقات اجتماعی رو روایت می‌کنن.",
-      en: "The poor Kim family infiltrates the wealthy Park household, exploring social class dynamics."
-    }
-  },
-  {
-    title: { fa: "باشگاه مشت‌زنی", en: "Fight Club" },
-    year: 1999,
-    rating: 8.8,
-    ratingCount: "2.3M",
-    genres: { fa: ["درام", "دلهره‌آور"], en: ["Drama", "Thriller"] },
-    duration: 139,
-    director: "David Fincher",
-    cast: ["Brad Pitt", "Edward Norton", "Helena Bonham Carter"],
-    icon: "🥊",
-    poster: "linear-gradient(135deg, #7f1d1d, #111)",
-    desc: {
-      fa: "مردی بی‌نام با تایلر دردل، یه فروشنده صابون، باشگاه مشت‌زنی مخفی راه‌اندازی می‌کنن.",
-      en: "An unnamed man and Tyler Durden, a soap salesman, start an underground fight club."
-    }
-  }
-];
-
 let currentLang = localStorage.getItem('cinema-lang') || 'fa';
 document.documentElement.setAttribute('data-lang', currentLang);
 
-// ===== RENDER FILMS =====
 function renderFilms(gridId, filmList) {
   const grid = document.getElementById(gridId);
   if (!grid) return;
-  grid.innerHTML = filmList.map((film, idx) => `
+  if (filmList.length === 0) {
+    grid.innerHTML = '<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 40px;">نتیجه‌ای پیدا نشد</p>';
+    return;
+  }
+  grid.innerHTML = filmList.map((film) => `
     <div class="film-card" onclick="openFilm(${films.indexOf(film)})">
       <div class="film-poster" style="background: ${film.poster};">
         <span style="font-size: 80px; filter: drop-shadow(0 0 20px rgba(77, 166, 255, 0.5));">${film.icon}</span>
@@ -1183,15 +1007,14 @@ function renderFilms(gridId, filmList) {
   `).join('');
 }
 
-// ===== INIT =====
 function initFilms() {
-  renderFilms('trendingGrid', films.slice(0, 6));
-  renderFilms('topRatedGrid', films.slice(0, 6));
+  const sortedByRating = [...films].sort((a, b) => b.rating - a.rating);
+  renderFilms('trendingGrid', films.slice(0, 10));
+  renderFilms('topRatedGrid', sortedByRating.slice(0, 10));
   renderFilms('categoryGrid', films);
   renderFilms('searchResults', []);
 }
 
-// ===== OPEN FILM MODAL =====
 function openFilm(idx) {
   const film = films[idx];
   document.getElementById('modalHero').style.background = film.poster;
@@ -1221,14 +1044,12 @@ document.getElementById('filmModal').addEventListener('click', (e) => {
   if (e.target.id === 'filmModal') closeFilm();
 });
 
-// ===== LOADING =====
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('loadingScreen').classList.add('hide');
   }, 1500);
 });
 
-// ===== CURSOR =====
 const cursor = document.getElementById('cursor');
 const cursorFollower = document.getElementById('cursorFollower');
 document.addEventListener('mousemove', (e) => {
@@ -1254,7 +1075,6 @@ document.querySelectorAll('a, button, .film-card').forEach(el => {
   });
 });
 
-// ===== THEME =====
 const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 const savedTheme = localStorage.getItem('cinema-theme') || 'dark';
@@ -1268,7 +1088,6 @@ themeToggle.addEventListener('click', () => {
   themeToggle.textContent = n === 'dark' ? '☀️' : '🌙';
 });
 
-// ===== LANGUAGE =====
 document.getElementById('langToggle').addEventListener('click', () => {
   currentLang = currentLang === 'fa' ? 'en' : 'fa';
   document.documentElement.setAttribute('data-lang', currentLang);
@@ -1276,7 +1095,6 @@ document.getElementById('langToggle').addEventListener('click', () => {
   initFilms();
 });
 
-// ===== PROGRESS =====
 const progressBar = document.getElementById('progressBar');
 window.addEventListener('scroll', () => {
   const s = window.scrollY;
@@ -1289,7 +1107,6 @@ document.getElementById('scrollTop').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// ===== HEADER =====
 const header = document.getElementById('header');
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
@@ -1302,7 +1119,6 @@ window.addEventListener('scroll', () => {
   lastScroll = s;
 });
 
-// ===== SEARCH =====
 document.getElementById('searchToggle').addEventListener('click', () => {
   document.getElementById('searchOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -1337,7 +1153,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ===== CATEGORIES =====
 document.querySelectorAll('.cat-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -1352,7 +1167,6 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
   });
 });
 
-// ===== INIT =====
 initFilms();
 </script>
 
