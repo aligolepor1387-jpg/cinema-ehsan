@@ -464,7 +464,6 @@ footer { background: var(--bg-secondary); border-top: 1px solid var(--border); p
 
 <!-- ====== کد مخفی کردن لودر (مستقل، قبل از فایل‌های فیلم) ====== -->
 <script>
-  // این کد مستقل است و به هیچ فایل خارجی وابسته نیست
   (function() {
     function hideLoader() {
       var loader = document.getElementById('loadingScreen');
@@ -475,7 +474,6 @@ footer { background: var(--bg-secondary); border-top: 1px solid var(--border); p
         }, 700);
       }
     }
-    // بعد از ۲ ثانیه حتماً لودر رو ببند
     setTimeout(hideLoader, 2000);
   })();
 </script>
@@ -485,7 +483,6 @@ footer { background: var(--bg-secondary); border-top: 1px solid var(--border); p
 <script src="films-3.js"></script>
 <script>
 // ===== کد امن برای ترکیب فیلم‌ها =====
-// اگه یکی از فایل‌ها لود نشده باشه، خطا نمی‌ده
 const films = [
   ...(typeof films1 !== 'undefined' ? films1 : []),
   ...(typeof films2 !== 'undefined' ? films2 : []),
@@ -651,6 +648,8 @@ function closeSearch() {
   renderFilms('searchResults', []);
 }
 
+/* ===== جستجوی قوی‌تر ===== */
+/* حالا عنوان فارسی، عنوان انگلیسی، کارگردان، بازیگران و ژانرها رو جستجو می‌کنه */
 document.getElementById('searchInput').addEventListener('input', (e) => {
   const query = e.target.value.toLowerCase().trim();
   if (!query) {
@@ -658,9 +657,19 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     return;
   }
   const results = films.filter(f =>
+    // عنوان فارسی و انگلیسی
     f.title.fa.toLowerCase().includes(query) ||
     f.title.en.toLowerCase().includes(query) ||
-    f.director.toLowerCase().includes(query)
+    // کارگردان
+    f.director.toLowerCase().includes(query) ||
+    // بازیگران
+    f.cast.some(c => c.toLowerCase().includes(query)) ||
+    // ژانرها
+    f.genres.fa.some(g => g.includes(query)) ||
+    f.genres.en.some(g => g.toLowerCase().includes(query)) ||
+    // عنوان روی پوستر
+    (f.posterTitle && f.posterTitle.toLowerCase().includes(query)) ||
+    (f.posterSubtitle && f.posterSubtitle.toLowerCase().includes(query))
   );
   renderFilms('searchResults', results);
 });
