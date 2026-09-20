@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg-primary: #0a0a0a;
@@ -391,14 +391,6 @@ section { position: relative; z-index: 1; padding: 80px 40px; }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.section-head .view-all {
-  color: var(--accent);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s;
-}
-.section-head .view-all:hover { transform: translateX(-5px); }
 
 /* FILM GRID */
 .films-grid {
@@ -425,18 +417,45 @@ section { position: relative; z-index: 1; padding: 80px 40px; }
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 80px;
+  padding: 20px;
+  text-align: center;
   position: relative;
   transition: transform 0.6s;
 }
-.film-card:hover .film-poster { transform: scale(1.08); }
+.film-card:hover .film-poster { transform: scale(1.05); }
+.poster-title {
+  font-family: 'Bebas Neue', 'Cinzel', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  margin-bottom: 4px;
+  z-index: 2;
+}
+.poster-subtitle {
+  font-family: 'Bebas Neue', 'Cinzel', sans-serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  z-index: 2;
+}
+.poster-icon {
+  font-size: 60px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.6));
+  z-index: 2;
+}
 .film-rating {
   position: absolute;
   top: 12px;
   left: 12px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(10px);
   padding: 6px 12px;
   border-radius: var(--radius-full);
@@ -446,7 +465,20 @@ section { position: relative; z-index: 1; padding: 80px 40px; }
   display: flex;
   align-items: center;
   gap: 4px;
-  z-index: 2;
+  z-index: 3;
+}
+.film-year-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  z-index: 3;
 }
 .film-info {
   position: absolute;
@@ -456,32 +488,20 @@ section { position: relative; z-index: 1; padding: 80px 40px; }
   padding: 60px 16px 16px;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
   z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
+.film-card:hover .film-info { opacity: 1; }
 .film-info h3 {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   line-height: 1.3;
 }
-.film-info .year {
-  font-size: 12px;
+.film-info .type {
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
-}
-.film-genres {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-.genre-tag {
-  padding: 3px 8px;
-  background: rgba(77, 166, 255, 0.2);
-  border: 1px solid rgba(77, 166, 255, 0.3);
-  border-radius: var(--radius-full);
-  font-size: 10px;
-  color: var(--accent);
-  font-weight: 600;
 }
 
 /* CATEGORY TABS */
@@ -562,11 +582,15 @@ section { position: relative; z-index: 1; padding: 80px 40px; }
 .modal-hero {
   height: 300px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 120px;
+  padding: 20px;
+  text-align: center;
   position: relative;
 }
+.modal-hero .poster-title { font-size: 52px; }
+.modal-hero .poster-subtitle { font-size: 18px; }
 .modal-body { padding: 32px; }
 .modal-body h2 {
   font-size: 32px;
@@ -700,7 +724,7 @@ section { position: relative; z-index: 1; padding: 80px 40px; }
 }
 [data-lang="en"] .search-close { left: auto; right: 20px; }
 .search-results {
-  max-width: 800px;
+  max-width: 1400px;
   margin: 40px auto 0;
 }
 
@@ -782,11 +806,13 @@ footer {
   section { padding: 60px 20px; }
   .section-head h2 { font-size: 26px; }
   .films-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
-  .film-info h3 { font-size: 13px; }
-  .film-info .year { font-size: 11px; }
+  .poster-title { font-size: 20px; }
+  .poster-subtitle { font-size: 10px; letter-spacing: 2px; }
+  .poster-icon { font-size: 40px; }
   .modal-body { padding: 24px 20px; }
   .modal-body h2 { font-size: 24px; }
-  .modal-hero { height: 200px; font-size: 80px; }
+  .modal-hero { height: 200px; }
+  .modal-hero .poster-title { font-size: 32px; }
   .search-overlay { padding: 80px 20px 20px; }
   .search-input { font-size: 18px; padding: 18px 24px; }
   .scroll-top { width: 44px; height: 44px; bottom: 20px; right: 20px; }
@@ -876,8 +902,7 @@ footer {
   <div class="container">
     <div class="section-head">
       <h2>
-        <span class="accent fa-only">🔥 پرطرفدار</span>
-        <span class="accent en-only">🔥 Trending Now</span>
+ <span class="accent fa-only">🔥 پرطرفدار</span>        <span class="accent en-only">🔥 Trending Now</span>
       </h2>
     </div>
     <div class="films-grid" id="trendingGrid"></div>
@@ -916,6 +941,10 @@ footer {
       <button class="cat-btn" data-genre="Thriller">دلهره‌آور</button>
       <button class="cat-btn" data-genre="Animation">انیمیشن</button>
       <button class="cat-btn" data-genre="Romance">عاشقانه</button>
+      <button class="cat-btn" data-genre="Horror">ترسناک</button>
+      <button class="cat-btn" data-genre="Comedy">کمدی</button>
+      <button class="cat-btn" data-genre="Adventure">ماجراجویی</button>
+      <button class="cat-btn" data-genre="Fantasy">فانتزی</button>
     </div>
     <div class="films-grid" id="categoryGrid"></div>
   </div>
@@ -979,7 +1008,10 @@ footer {
 <div class="scroll-top" id="scrollTop">↑</div>
 
 <script src="films.js"></script>
+<script src="films-2.js"></script>
+<script src="films-3.js"></script>
 <script>
+const films = [...films1, ...films2, ...films3];
 let currentLang = localStorage.getItem('cinema-lang') || 'fa';
 document.documentElement.setAttribute('data-lang', currentLang);
 
@@ -992,16 +1024,16 @@ function renderFilms(gridId, filmList) {
   }
   grid.innerHTML = filmList.map((film) => `
     <div class="film-card" onclick="openFilm(${films.indexOf(film)})">
-      <div class="film-poster" style="background: ${film.poster};">
-        <span style="font-size: 80px; filter: drop-shadow(0 0 20px rgba(77, 166, 255, 0.5));">${film.icon}</span>
+      <div class="film-poster" style="background: ${film.posterGradient};">
         <div class="film-rating">★ ${film.rating}</div>
+        <div class="film-year-badge">${film.year}</div>
+        ${film.isCartoon && film.icon ? `<div class="poster-icon">${film.icon}</div>` : ''}
+        <div class="poster-title">${film.posterTitle}</div>
+        <div class="poster-subtitle">${film.posterSubtitle}</div>
       </div>
       <div class="film-info">
         <h3>${film.title[currentLang]}</h3>
-        <div class="year">${film.year} · ${film.duration} min</div>
-        <div class="film-genres">
-          ${film.genres[currentLang].map(g => `<span class="genre-tag">${g}</span>`).join('')}
-        </div>
+        <div class="type">${film.genres[currentLang].join(' · ')}</div>
       </div>
     </div>
   `).join('');
@@ -1009,16 +1041,20 @@ function renderFilms(gridId, filmList) {
 
 function initFilms() {
   const sortedByRating = [...films].sort((a, b) => b.rating - a.rating);
-  renderFilms('trendingGrid', films.slice(0, 10));
-  renderFilms('topRatedGrid', sortedByRating.slice(0, 10));
+  renderFilms('trendingGrid', films.slice(0, 20));
+  renderFilms('topRatedGrid', sortedByRating.slice(0, 20));
   renderFilms('categoryGrid', films);
   renderFilms('searchResults', []);
 }
 
 function openFilm(idx) {
   const film = films[idx];
-  document.getElementById('modalHero').style.background = film.poster;
-  document.getElementById('modalHero').innerHTML = `<span style="font-size: 120px; filter: drop-shadow(0 0 40px rgba(77, 166, 255, 0.6));">${film.icon}</span>`;
+  document.getElementById('modalHero').style.background = film.posterGradient;
+  document.getElementById('modalHero').innerHTML = `
+    ${film.isCartoon && film.icon ? `<div class="poster-icon" style="font-size: 80px;">${film.icon}</div>` : ''}
+    <div class="poster-title">${film.posterTitle}</div>
+    <div class="poster-subtitle">${film.posterSubtitle}</div>
+  `;
   document.getElementById('modalTitle').textContent = film.title[currentLang];
   document.getElementById('modalSubtitle').textContent = `${film.year} · ${film.director}`;
   document.getElementById('modalRating').textContent = film.rating;
