@@ -462,24 +462,43 @@ footer { background: var(--bg-secondary); border-top: 1px solid var(--border); p
 
 <div class="scroll-top" id="scrollTop">↑</div>
 
-<!-- ===== کد مخفی کردن لودر (مستقل و اول از همه) ===== -->
+<!-- ====== کد مخفی کردن لودر (مستقل، قبل از فایل‌های فیلم) ====== -->
 <script>
-  setTimeout(function() {
-    var loader = document.getElementById('loadingScreen');
-    if (loader) {
-      loader.classList.add('hide');
-      setTimeout(function() {
-        loader.style.display = 'none';
-      }, 700);
+  // این کد مستقل است و به هیچ فایل خارجی وابسته نیست
+  (function() {
+    function hideLoader() {
+      var loader = document.getElementById('loadingScreen');
+      if (loader && !loader.classList.contains('hide')) {
+        loader.classList.add('hide');
+        setTimeout(function() {
+          loader.style.display = 'none';
+        }, 700);
+      }
     }
-  }, 2000);
+    // بعد از ۲ ثانیه حتماً لودر رو ببند
+    setTimeout(hideLoader, 2000);
+  })();
 </script>
 
 <script src="films.js"></script>
 <script src="films-2.js"></script>
 <script src="films-3.js"></script>
 <script>
-const films = [...films1, ...films2, ...films3];
+// ===== کد امن برای ترکیب فیلم‌ها =====
+// اگه یکی از فایل‌ها لود نشده باشه، خطا نمی‌ده
+const films = [
+  ...(typeof films1 !== 'undefined' ? films1 : []),
+  ...(typeof films2 !== 'undefined' ? films2 : []),
+  ...(typeof films3 !== 'undefined' ? films3 : [])
+];
+
+console.log('=== تشخیص وضعیت فایل‌ها ===');
+console.log('films1:', typeof films1, typeof films1 !== 'undefined' ? `(${films1.length} فیلم)` : '(لود نشده)');
+console.log('films2:', typeof films2, typeof films2 !== 'undefined' ? `(${films2.length} فیلم)` : '(لود نشده)');
+console.log('films3:', typeof films3, typeof films3 !== 'undefined' ? `(${films3.length} فیلم)` : '(لود نشده)');
+console.log('کل فیلم‌ها:', films.length);
+console.log('===========================');
+
 let currentLang = localStorage.getItem('cinema-lang') || 'fa';
 document.documentElement.setAttribute('data-lang', currentLang);
 
@@ -513,6 +532,7 @@ function initFilms() {
   renderFilms('topRatedGrid', sortedByRating.slice(0, 20));
   renderFilms('categoryGrid', films);
   renderFilms('searchResults', []);
+  console.log('تعداد کارت‌های رندر شده:', document.querySelectorAll('.film-card').length);
 }
 
 function openFilm(idx) {
